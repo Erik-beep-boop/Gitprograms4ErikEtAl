@@ -129,15 +129,34 @@ while true
     u_t = (1/6)*(k1 + 2*k2 + 2*k3 + k4);
     
     uTHEORETICAL = zeros(m, 1);
-    for i = 1:gridsize
+    for i = 0:gridsize-1
+        uTHEORETICAL(i+1,1) = (cos(2*pi*i/(gridsize-1))) * cos(2*pi*(T+1)/(gridsize-1));
+        uTHEORETICAL(i+gridsize+1,1) = (sin(2*pi*i/(gridsize-1))) * sin(2*pi*(T+1)/(gridsize-1));
+    end
 
     u = u + k*u_t;
     T = T + k
-  %  plot(u(gridsize+1:m))
-    plot(1.1*uTHEORETICAL(1:gridsize))
-    hold on
-    plot(u(1:gridsize))
-    axis([0 gridsize -2 2])
-    hold off
+
+    errVec = u - uTHEORETICAL;
+    err = sqrt(h)*norm(errVec)
+
+    if false
+        plot(u(gridsize+1:m))
+        hold on
+        plot(u(1:gridsize))
+        axis([0 gridsize -2 2])
+        hold off
+    end
+
+    if true
+        plot(uTHEORETICAL)
+        hold on
+        plot(u)
+        hold on
+        plot(errVec*10000)
+        axis([0 m -2 2])
+        hold off
+    end
     pause(0.00005)
+    
 end
