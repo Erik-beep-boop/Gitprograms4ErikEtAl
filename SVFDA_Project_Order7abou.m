@@ -1,6 +1,8 @@
 clear all;
 close all;
 clc;
+s = settings;
+s.matlab.appearance.figure.GraphicsTheme.TemporaryValue = "light";
 gridsize = 79;
 m = 2*gridsize;
 h = 1;
