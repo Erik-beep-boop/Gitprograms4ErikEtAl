@@ -25,7 +25,6 @@ A=[0 1
 
 D_mat =[beta 0
    0 0];
-%alpha=-1; % alpha<=0 for well-posed
 
 
 e1=[1 0];e2=[0 1]; % Pick out variable
@@ -46,7 +45,7 @@ Val_operator_SC_PDE;  % Change here to make use of upwind SBP
 
 new=2;		  	        % tid (n+1)
 old=1;	        	    % tid (n)
-temp_tid=0;		        % tempor?r vid tidskiftningen
+temp_tid=0;		        
 
 t=0;
 
@@ -124,7 +123,7 @@ V(m+1:n,old)=uc2+uc1; % velocity
 felet(1)=sqrt(h)*norm(V(:,old)-exakt);
 
      
-Plotta_Maxwell_1D; % Plott the solution and generate a movie
+Plotta_Maxwell_1D; % Plot the solution and generate a movie
 
 
 
@@ -149,7 +148,7 @@ for nr_itter=1:max_itter
   temp_tid=old;old=new;new=temp_tid;
   
   if mod(nr_itter,n_step)==0
-      Plotta_Maxwell_1D; % Plott the solution and generate a movie
+      Plotta_Maxwell_1D; % Plot the solution and generate a movie
   end
   
 exakt=zeros(n,1);	        % Analytiska l?sningen
