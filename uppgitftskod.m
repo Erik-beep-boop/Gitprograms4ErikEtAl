@@ -81,11 +81,20 @@ end
 
 P=I_m2-HI2*L'*inv(L*HI2*L')*L; % Projection operator
 
-T=P*kron(A,D1)*P;
+if (ordning == 5 | ordning == 7 | ordning == 9)
+
+    Dpm = zeros(2*m,2*m);
+    Dpm(1:m, m+1:2*m) = Dp;
+    Dpm(m+1:2*m, 1:m) = Dm;
+    T=P*Dpm*P;
+    %size(Dpm) % byt till minus T
+else
+    T=P*kron(A,D1)*P; 
+end
+
+
 D=sparse(kron(inv(C),I_m)*T);
    
-    
-
 temp=zeros(n,1);  % temporary solutionvector in RK4 w1,..,w4
 
 w1=zeros(n,1);      % First step in RK
@@ -98,8 +107,8 @@ x=linspace(x_l,x_r,m);	  % x points
 felet=zeros(max_itter+1,1);	% Error vector
 
 %if BC==1
-uc1=exp(-((x-t)/rr).^2)';
-uc2=-exp(-((x+t)/rr).^2)';
+uc1=exp(-((x+t)/rr).^2)';
+uc2=-exp(-((x-t)/rr).^2)';
 
 
 %figure(1);
@@ -107,7 +116,7 @@ uc2=-exp(-((x+t)/rr).^2)';
 
 exakt=zeros(n,1);	        % Analytiska lösningen
 exakt(1:m)=uc1-uc2;
-exakt(m+1:n)=-uc2+uc1;
+exakt(m+1:n)=uc2+uc1;
 
 V=zeros(n,2);	                % Lösningsvektorn
 V(1:m,old)=uc1-uc2; % pressure
@@ -153,7 +162,7 @@ uc1=exp(-((x-tt)/rr).^2)';
 uc2=-exp(-((x+tt)/rr).^2)';
 exakt(1:m)=uc1-uc2;
 exakt(m+1:n)=uc1+uc2;
-felet(nr_itter+1)=sqrt(h)*norm(V(:,old)-exakt);
+felet(nr_itter+1)=sqrt(h)*norm(-V(:,old)-exakt);
   
 end
 
@@ -163,7 +172,9 @@ end
  tiden=linspace(0,t_1,max_itter+1);
  
  if BC==1
-     disp(['The l_2 error is given by : ', num2str(felet(nr_itter+1))])   
+     disp(['The l_2 error is given by : ', num2str(felet(nr_itter+1))])
+     % decimal = num2str(felet(nr_itter+1), '%.20f');
+     % disp(['The l_2 error is given by : ', decimal ]);   
  end
  
 figure(2);
